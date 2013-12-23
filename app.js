@@ -8,6 +8,7 @@ var routes = require('./routes');
 var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
+var busboy = require('connect-busboy');
 var hello = require('./routes/hello');
 var api = require('./routes/api');
 
@@ -22,7 +23,7 @@ app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(express.methodOverride());
-app.use(express.multipart());
+app.use(busboy({ immediate: true }));
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'frontend')));
 

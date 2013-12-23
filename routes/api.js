@@ -26,7 +26,7 @@ exports.create = function(req, res){
 exports.read = function(req, res){
 	res.send(vcard);
 
-	res.end();	
+	res.end();
 };
 
 exports.update = function(req, res){
@@ -54,24 +54,24 @@ exports.upload = function(req, res) {
     var ext;
 
     switch (type) {
-    	case 'photo':
-    		ext = '.jpg';
-    		break;
-    	case 'voice':
-    		ext = '.mp3';
-    		break;
+        case 'photo':
+            ext = '.jpg';
+            break;
+        case 'voice':
+            ext = '.mp3';
+            break;
     }
+
     var filename = req.params.nickname + ext;
+    var newPath = path.join(__dirname, '../frontend/uploads', filename);
 
-    fs.readFile(req.files.file.path, function (err, data) {
-        var newPath = path.join(__dirname, '../frontend/', 'uploads',  filename);
+    req.busboy.on('file', function(fieldname, file, filename, encoding, mimetype) {
+        var wstream = fs.createWriteStream(newPath);
+        file.pipe(wstream);
+    });
 
-        fs.writeFile(newPath, data, function (err) {
-            if (err) {
-                res.json({status: 'error', message: err});
-            } else {
-                res.json({status: 'ok'});
-            }
-        });
+    req.busboy.on('end', function() {
+        res.json({status: 'ok'});
+        res.end();
     });
 };
