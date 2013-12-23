@@ -10,7 +10,9 @@
       <div class="col-xs-12 col-md-6">
         <div class="alert alert-danger">
           <h2>${name}</h2>
-          <p class="label label-warning">${tel}</p>
+          <span class="label label-warning">${tel}</span>          
+          <p><input type='file' class="btn btn-large btn-info" name='filename'>
+          <p><button class="btn btn-large btn-info" data-toggle='upload-photo'>Upload Photo</button></p>          
         </div>
       </div>
   </script>
@@ -33,6 +35,11 @@
         dataType: "json",
         success: function (data, textStatus, jqXHR) {
           $('#vcardTemplate').tmpl(data).appendTo('#userList');
+        },
+        complete: function (data, textStatus, jqXHR) {
+          $("button[data-toggle='upload-photo']").on('click', function() {
+            alert("OK");
+          });          
         }
       });
     });
